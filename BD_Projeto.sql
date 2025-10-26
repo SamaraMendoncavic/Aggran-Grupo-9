@@ -1,14 +1,16 @@
-CREATE DATABASE aggran;
-USE aggran;
+CREATE DATABASE Aggran;
+USE Aggran;
 
-CREATE TABLE Cadastro (
+CREATE TABLE cadastro (
 	idCadastro INT PRIMARY KEY AUTO_INCREMENT,
     nomeResponsavel VARCHAR(50) NOT NULL,
-    cnpj VARCHAR(14) NOT NULL UNIQUE,
     nomeEmpresa VARCHAR(50) DEFAULT NULL,
+	cnpj VARCHAR(14) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
 	CONSTRAINT chkEmail CHECK(email LIKE '%@%.%'),
-    senha VARCHAR(255) NOT NULL,
+    telefone CHAR(18),
+	tipoProducao VARCHAR(10),
+    CONSTRAINT tipoProducao CHECK(email IN ('Lavoura', 'Pastagem', 'Perene')),
     cep VARCHAR(14) NOT NULL,
 	logradouro VARCHAR(40) NOT NULL,
 	numero INT NOT NULL,
@@ -16,12 +18,12 @@ CREATE TABLE Cadastro (
 	bairro VARCHAR(40) NOT NULL,
     cidade VARCHAR(40) NOT NULL,
     uf CHAR(2) NOT NULL,
-    tipoProducao VARCHAR(10),
-    CONSTRAINT tipoProducao CHECK(email IN ('Lavoura', 'Pastagem', 'Perene')),
-    dataCadastro DATETIME DEFAULT current_timestamp
+    tamanhoTerreno DECIMAL,
+    dataCadastro DATETIME DEFAULT current_timestamp,
+	senha VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE Usuario (
+CREATE TABLE usuario (
 	idUsuario INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(50),
     email VARCHAR(100) NOT NULL UNIQUE,
@@ -50,7 +52,7 @@ CREATE TABLE Sensor (
     CONSTRAINT fkloteSensor FOREIGN KEY (fkidloteSensor) REFERENCES LoteSensor(idloteSensor)
 );
 
-CREATE TABLE UsuarioSensor (
+CREATE TABLE usuarioSensor (
 	idUsuarioSensor INT,
 	fkidUsuario INT NOT NULL,
     fkidSensor INT NOT NULL,
@@ -60,7 +62,7 @@ CREATE TABLE UsuarioSensor (
 );
 
 
-CREATE TABLE StatusSensor (
+CREATE TABLE statusSensor (
 	idManutencao INT PRIMARY KEY AUTO_INCREMENT,
     statusSensor VARCHAR(10),
     CONSTRAINT chkstatus CHECK (statusSensor IN ('Manutenção', 'Para uso', 'Em uso')),
@@ -72,7 +74,7 @@ CREATE TABLE StatusSensor (
     CONSTRAINT fkstatusSensor FOREIGN KEY (fkidSensor) REFERENCES Sensor(idSensor)
 );
 
-CREATE TABLE Registro (
+CREATE TABLE registro (
 	idRegistro INT PRIMARY KEY AUTO_INCREMENT,
     umidadeSolo DECIMAL(5,2),
     dataRegistro DATETIME DEFAULT current_timestamp,
